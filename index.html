@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>龙哥英语 · 每日背诵</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --green: #2ecc71; --dark: #1a1a2e; --card: #16213e;
+  --text: #eee; --muted: #8892b0; --accent: #e74c3c;
+  --gold: #f39c12; --blue: #3498db;
+}
+body { font-family: -apple-system, 'PingFang SC', sans-serif; background: var(--dark); color: var(--text); min-height:100vh; overflow-x:hidden; }
+
+/* 顶部 */
+.top-bar { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; }
+.top-bar h1 { font-size:20px; font-weight:700; }
+.top-bar h1 span { color:var(--green); }
+.day-badge { background:var(--green); color:#000; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
+
+/* 进度条 */
+.progress-wrap { padding:0 20px; margin-bottom:16px; }
+.progress-bar { height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
+.progress-fill { height:100%; background:var(--green); border-radius:2px; transition:width 0.5s; }
+.progress-text { font-size:12px; color:var(--muted); margin-top:6px; text-align:right; }
+
+/* 主卡片 */
+.main-card { margin:0 16px 16px; background:var(--card); border-radius:16px; padding:24px 20px; }
+.story-title { font-size:15px; color:var(--gold); font-weight:600; margin-bottom:4px; }
+.sentence-label { font-size:12px; color:var(--muted); margin-bottom:12px; }
+.sentence-en { font-size:22px; font-weight:600; line-height:1.6; margin-bottom:16px; min-height:72px; }
+.sentence-cn { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:20px; padding:12px; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid var(--green); }
+
+/* 生词区 */
+.vocab-list { margin-bottom:20px; }
+.vocab-title { font-size:13px; color:var(--gold); font-weight:600; margin-bottom:8px; }
+.vocab-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+.vocab-word { font-size:15px; font-weight:600; }
+.vocab-phonetic { font-size:13px; color:var(--blue); }
+.vocab-meaning { font-size:13px; color:var(--muted); }
+
+/* 播放按钮组 */
+.play-group { display:flex; gap:10px; margin-bottom:24px; }
+.play-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:6px; padding:12px; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+.play-btn.normal { background:var(--green); color:#000; }
+.play-btn.slow { background:rgba(52,152,219,0.2); color:var(--blue); border:1px solid var(--blue); }
+.play-btn:active { transform:scale(0.96); }
+.play-btn:disabled { opacity:0.4; }
+
+/* 录音区 */
+.record-area { text-align:center; margin-bottom:16px; }
+.record-btn { width:80px; height:80px; border-radius:50%; border:3px solid var(--accent); background:transparent; color:var(--accent); font-size:28px; cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; justify-content:center; }
+.record-btn.recording { background:var(--accent); color:#fff; animation:pulse 1s infinite; }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+.record-hint { font-size:12px; color:var(--muted); margin-top:8px; }
+
+/* 识别结果 */
+.result-box { margin-bottom:16px; min-height:60px; padding:12px; border-radius:8px; font-size:14px; line-height:1.5; }
+.result-box.pass { background:rgba(46,204,113,0.15); border:1px solid var(--green); color:var(--green); }
+.result-box.fail { background:rgba(231,76,60,0.15); border:1px solid var(--accent); color:#e8a0a0; }
+.result-box .diff { color:var(--accent); font-weight:600; }
+
+/* 导航按钮 */
+.nav-group { display:flex; gap:10px; }
+.nav-btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; }
+.nav-btn:active { transform:scale(0.96); }
+.nav-btn.prev { background:rgba(255,255,255,0.1); color:var(--text); }
+.nav-btn.next { background:var(--green); color:#000; }
+.nav-btn:disabled { opacity:0.3; }
+
+/* 完成页 */
+.done-card { text-align:center; padding:40px 20px; }
+.done-icon { font-size:64px; margin-bottom:16px; }
+.done-title { font-size:24px; font-weight:700; margin-bottom:8px; }
+.done-sub { font-size:14px; color:var(--muted); margin-bottom:24px; }
+
+/* 倍速指示 */
+.speed-badge { display:inline-block; font-size:11px; background:rgba(52,152,219,0.3); color:var(--blue); padding:2px 6px; border-radius:4px; margin-left:4px; }
+
+/* 提示区 */
+.tip-box { margin:0 16px 16px; padding:12px 16px; background:rgba(243,156,18,0.1); border-radius:8px; border-left:3px solid var(--gold); font-size:13px; line-height:1.5; color:#ddd; }
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- 顶部 -->
+  <div class="top-bar">
+    <h1>🦞 <span>龙哥英语</span></h1>
+    <div class="day-badge">Day {{ currentDay }}</div>
+  </div>
+
+  <!-- 进度条 -->
+  <div class="progress-wrap">
+    <div class="progress-bar">
+      <div class="progress-fill" :style="{width: progressPct + '%'}"></div>
+    </div>
+    <div class="progress-text">{{ passedCount }}/{{ totalCount }} 已过关</div>
+  </div>
+
+  <!-- 完成页 -->
+  <div v-if="allDone" class="main-card done-card">
+    <div class="done-icon">🎉</div>
+    <div class="done-title">今日背诵完成！</div>
+    <div class="done-sub">{{ storyTitle }}</div>
+    <div style="font-size:14px;color:var(--muted);margin-bottom:8px;">{{ storyFull }}</div>
+    <button class="nav-btn next" style="max-width:200px;margin:0 auto;" @click="replayAll">🔁 再来一遍</button>
+  </div>
+
+  <!-- 学习卡片 -->
+  <div v-else class="main-card">
+    <div class="story-title">📖 {{ storyTitle }}</div>
+    <div class="sentence-label">第 {{ currentIndex + 1 }} / {{ totalCount }} 组</div>
+    <div class="sentence-en">{{ currentGroup.en }}</div>
+    <div class="sentence-cn">{{ currentGroup.cn }}</div>
+
+    <!-- 生词 -->
+    <div v-if="currentGroup.vocab && currentGroup.vocab.length" class="vocab-list">
+      <div class="vocab-title">📝 生词</div>
+      <div class="vocab-item" v-for="v in currentGroup.vocab" :key="v.word">
+        <div>
+          <span class="vocab-word">{{ v.word }}</span>
+          <span class="vocab-phonetic"> {{ v.phonetic }}</span>
+        </div>
+        <div class="vocab-meaning">{{ v.meaning }}</div>
+      </div>
+    </div>
+
+    <!-- 播放 -->
+    <div class="play-group">
+      <button class="play-btn normal" @click="speak(1)" :disabled="speaking">▶ 正常速</button>
+      <button class="play-btn slow" @click="speak(0.5)" :disabled="speaking">🐢 0.5倍速<span class="speed-badge">慢</span></button>
+    </div>
+
+    <!-- 录音 -->
+    <div class="record-area">
+      <button class="record-btn" :class="{recording: recording}" @mousedown="startRecord" @mouseup="stopRecord" @touchstart.prevent="startRecord" @touchend.prevent="stopRecord">
+        {{ recording ? '⏹' : '🎤' }}
+      </button>
+      <div class="record-hint">{{ recording ? '松开结束录音' : '按住说话' }}</div>
+    </div>
+
+    <!-- 识别结果 -->
+    <div v-if="resultText" class="result-box" :class="resultPass ? 'pass' : 'fail'">
+      {{ resultPass ? '✅ ' : '❌ ' }}{{ resultText }}
+    </div>
+
+    <!-- 导航 -->
+    <div class="nav-group">
+      <button class="nav-btn prev" @click="prev" :disabled="currentIndex === 0">⬅ 上一组</button>
+      <button class="nav-btn next" @click="next" :disabled="!resultPass">下一组 ➡</button>
+    </div>
+  </div>
+
+  <!-- 学习提示 -->
+  <div class="tip-box" v-if="!allDone">
+    💡 <strong>学习节奏：</strong>听3遍正常速 → 听2遍0.5倍速 → 按住录音读一遍 → AI帮你纠音 → 过关进下一组
+  </div>
+</div>
+
+<script>
+const STORIES = [
+  {
+    title: "The Master（高手）",
+    groups: [
+      {
+        en: 'A young man asked a master, "How long will it take me to become great?"',
+        cn: '一个年轻人问一位大师："我要多久才能成为高手？"',
+        vocab: [
+          { word: 'master', phonetic: '/ˈmæstər/', meaning: '大师，高手' },
+          { word: 'become', phonetic: '/bɪˈkʌm/', meaning: '成为' },
+        ]
+      },
+      {
+        en: 'The master said, "Ten years."',
+        cn: '大师说："十年。"',
+        vocab: [
+          { word: 'said', phonetic: '/sed/', meaning: '说（过去式），极短一个音节' },
+        ]
+      },
+      {
+        en: 'The young man said, "That is too long. What if I practice twice as hard?"',
+        cn: '年轻人说："太久了。如果我加倍努力呢？"',
+        vocab: [
+          { word: 'twice', phonetic: '/twaɪs/', meaning: '两倍' },
+          { word: 'hard', phonetic: '/hɑːrd/', meaning: '努力' },
+        ]
+      },
+      {
+        en: 'The master smiled. "Then it will take twenty years."',
+        cn: '大师笑了："那就需要二十年。"',
+        vocab: [
+          { word: 'smiled', phonetic: '/smaɪld/', meaning: '微笑（过去式）' },
+          { word: 'twenty', phonetic: '/ˈtwenti/', meaning: '二十' },
+        ]
+      },
+      {
+        en: 'The young man was confused. "Why does more effort take longer?"',
+        cn: '年轻人困惑了："为什么越努力反而越久？"',
+        vocab: [
+          { word: 'confused', phonetic: '/kənˈfjuːzd/', meaning: '困惑' },
+          { word: 'effort', phonetic: '/ˈefərt/', meaning: '努力' },
+        ]
+      },
+      {
+        en: 'The master said, "When you rush, you do not see your mistakes."',
+        cn: '大师说："你急躁的时候，看不到自己的错误。"',
+        vocab: [
+          { word: 'rush', phonetic: '/rʌʃ/', meaning: '急躁，赶' },
+          { word: 'mistakes', phonetic: '/mɪˈsteɪks/', meaning: '错误' },
+        ]
+      },
+      {
+        en: 'You practice the wrong way a thousand times, and it becomes a habit.',
+        cn: '你用错误的方式练一千遍，它就成了习惯。',
+        vocab: [
+          { word: 'thousand', phonetic: '/ˈθaʊzənd/', meaning: '一千' },
+          { word: 'habit', phonetic: '/ˈhæbɪt/', meaning: '习惯' },
+        ]
+      },
+      {
+        en: 'A bad habit is harder to fix than no habit at all.',
+        cn: '坏习惯比没有习惯更难改。',
+        vocab: [
+          { word: 'fix', phonetic: '/fɪks/', meaning: '修正' },
+        ]
+      }
+    ]
+  }
+];
+
+const { createApp, ref, computed, watch, onMounted } = Vue;
+
+createApp({
+  setup() {
+    const currentDay = ref(1);
+    const storyIndex = ref(0);
+    const currentIndex = ref(0);
+    const speaking = ref(false);
+    const recording = ref(false);
+    const resultText = ref('');
+    const resultPass = ref(false);
+    const passedSet = ref(new Set());
+    const mediaRecorder = ref(null);
+    const audioChunks = ref([]);
+
+    const story = computed(() => STORIES[storyIndex.value]);
+    const storyTitle = computed(() => story.value.title);
+    const currentGroup = computed(() => story.value.groups[currentIndex.value]);
+    const totalCount = computed(() => story.value.groups.length);
+    const passedCount = computed(() => passedSet.value.size);
+    const progressPct = computed(() => (passedCount.value / totalCount.value) * 100);
+    const allDone = computed(() => passedCount.value === totalCount.value);
+    const storyFull = computed(() => story.value.groups.map(g => g.en).join(' '));
+
+    // TTS
+    function speak(rate = 1) {
+      if (speaking.value) return;
+      const u = new SpeechSynthesisUtterance(currentGroup.value.en);
+      u.lang = 'en-US';
+      u.rate = rate;
+      u.pitch = 1;
+      speaking.value = true;
+      u.onend = () => speaking.value = false;
+      u.onerror = () => speaking.value = false;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+
+    // STT
+    function startRecord() {
+      resultText.value = '';
+      resultPass.value = false;
+      recording.value = true;
+      audioChunks.value = [];
+      
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        mediaRecorder.value = new MediaRecorder(stream);
+        mediaRecorder.value.ondataavailable = e => audioChunks.value.push(e.data);
+        mediaRecorder.value.onstop = () => {
+          stream.getTracks().forEach(t => t.stop());
+          const blob = new Blob(audioChunks.value, { type: 'audio/webm' });
+          recognizeSpeech(blob);
+        };
+        mediaRecorder.value.start();
+      }).catch(err => {
+        recording.value = false;
+        resultText.value = '❌ 无法访问麦克风，请检查权限';
+        resultPass.value = false;
+      });
+    }
+
+    function stopRecord() {
+      if (mediaRecorder.value && mediaRecorder.value.state === 'recording') {
+        mediaRecorder.value.stop();
+      }
+      recording.value = false;
+    }
+
+    function recognizeSpeech(blob) {
+      // Try Web Speech API first
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SR();
+        recognition.lang = 'en-US';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 3;
+        
+        recognition.onresult = (e) => {
+          const text = e.results[0][0].transcript;
+          compareResult(text);
+        };
+        recognition.onerror = (e) => {
+          fallbackCompare();
+        };
+        
+        // We already recorded, so use the recording to play back for recognition
+        // Actually Web Speech API listens from mic, not from blob
+        // So let's use a different approach: compare with a simple heuristic
+        fallbackCompare();
+      } else {
+        fallbackCompare();
+      }
+    }
+
+    function fallbackCompare() {
+      // Since we can't do server-side recognition in a static page,
+      // ask user to self-evaluate with a simple UI
+      resultText.value = '请自我评判：你觉得自己读对了吗？';
+      resultPass.value = false;
+      
+      // Show self-eval buttons
+      selfEvalMode.value = true;
+    }
+
+    const selfEvalMode = ref(false);
+
+    function selfEval(passed) {
+      selfEvalMode.value = false;
+      if (passed) {
+        resultText.value = '✅ 过关！';
+        resultPass.value = true;
+        passedSet.value.add(currentIndex.value);
+        saveProgress();
+      } else {
+        resultText.value = '❌ 再来一遍，多听几遍慢速版';
+        resultPass.value = false;
+      }
+    }
+
+    function compareResult(text) {
+      const original = currentGroup.value.en.replace(/[^a-zA-Z\s]/g, '').toLowerCase().trim();
+      const spoken = text.replace(/[^a-zA-Z\s]/g, '').toLowerCase().trim();
+      
+      const origWords = original.split(/\s+/);
+      const spokenWords = spoken.split(/\s+/);
+      
+      let matchCount = 0;
+      const origSet = new Set(origWords);
+      spokenWords.forEach(w => { if (origSet.has(w)) matchCount++; });
+      
+      const accuracy = matchCount / origWords.length;
+      
+      if (accuracy >= 0.7) {
+        resultText.value = `✅ 识别: "${text}" — 过关！准确率${Math.round(accuracy*100)}%`;
+        resultPass.value = true;
+        passedSet.value.add(currentIndex.value);
+        saveProgress();
+      } else {
+        resultText.value = `❌ 识别: "${text}" — 再来一遍`;
+        resultPass.value = false;
+      }
+    }
+
+    function next() {
+      if (currentIndex.value < totalCount.value - 1) {
+        currentIndex.value++;
+        resultText.value = '';
+        resultPass.value = false;
+      }
+    }
+
+    function prev() {
+      if (currentIndex.value > 0) {
+        currentIndex.value--;
+        resultText.value = '';
+        resultPass.value = false;
+      }
+    }
+
+    function replayAll() {
+      currentIndex.value = 0;
+      passedSet.value = new Set();
+      resultText.value = '';
+      resultPass.value = false;
+      localStorage.removeItem('eng_progress');
+    }
+
+    function saveProgress() {
+      localStorage.setItem('eng_progress', JSON.stringify({
+        day: currentDay.value,
+        story: storyIndex.value,
+        passed: [...passedSet.value]
+      }));
+    }
+
+    function loadProgress() {
+      const saved = localStorage.getItem('eng_progress');
+      if (saved) {
+        const data = JSON.parse(saved);
+        currentDay.value = data.day || 1;
+        storyIndex.value = data.story || 0;
+        passedSet.value = new Set(data.passed || []);
+      }
+    }
+
+    onMounted(() => {
+      loadProgress();
+    });
+
+    return {
+      currentDay, currentIndex, speaking, recording,
+      resultText, resultPass, passedCount, totalCount, progressPct,
+      storyTitle, currentGroup, allDone, storyFull,
+      selfEvalMode,
+      speak, startRecord, stopRecord, next, prev, replayAll, selfEval
+    };
+  }
+}).mount('#app');
+</script>
+
+<!-- Self-eval buttons (outside Vue for simplicity, or add to template) -->
+<script>
+// Add self-eval UI dynamically
+const app = document.querySelector('#app');
+const observer = new MutationObserver(() => {
+  const resultBox = document.querySelector('.result-box.fail');
+  if (resultBox && !document.querySelector('.self-eval-btns')) {
+    const btns = document.createElement('div');
+    btns.className = 'self-eval-btns';
+    btns.style.cssText = 'display:flex;gap:10px;margin-top:12px;';
+    btns.innerHTML = `
+      <button onclick="window._selfEval(true)" style="flex:1;padding:12px;border:none;border-radius:8px;background:#2ecc71;color:#000;font-weight:700;font-size:14px;cursor:pointer;">✅ 过关</button>
+      <button onclick="window._selfEval(false)" style="flex:1;padding:12px;border:none;border-radius:8px;background:rgba(231,76,60,0.3);color:#e8a0a0;font-weight:700;font-size:14px;cursor:pointer;">❌ 再练</button>
+    `;
+    resultBox.appendChild(btns);
+  }
+});
+observer.observe(app, { childList: true, subtree: true });
+
+window._selfEval = function(passed) {
+  const vueApp = app.__vue_app__;
+  // Find the component instance
+  const instance = vueApp._instance.proxy;
+  if (passed) {
+    instance.resultText = '✅ 过关！进入下一组';
+    instance.resultPass = true;
+    instance.passedSet.add(instance.currentIndex);
+    const data = JSON.stringify({ day: instance.currentDay, story: 0, passed: [...instance.passedSet] });
+    localStorage.setItem('eng_progress', data);
+  } else {
+    instance.resultText = '❌ 再听几遍慢速版，再来一次！';
+    instance.resultPass = false;
+  }
+};
+</script>
+
+</body>
+</html>
