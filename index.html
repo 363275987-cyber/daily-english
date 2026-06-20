@@ -2,469 +2,216 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>龙哥英语 · 每日背诵</title>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-:root {
-  --green: #2ecc71; --dark: #1a1a2e; --card: #16213e;
-  --text: #eee; --muted: #8892b0; --accent: #e74c3c;
-  --gold: #f39c12; --blue: #3498db;
-}
-body { font-family: -apple-system, 'PingFang SC', sans-serif; background: var(--dark); color: var(--text); min-height:100vh; overflow-x:hidden; }
-
-/* 顶部 */
-.top-bar { display:flex; justify-content:space-between; align-items:center; padding:16px 20px; }
-.top-bar h1 { font-size:20px; font-weight:700; }
-.top-bar h1 span { color:var(--green); }
-.day-badge { background:var(--green); color:#000; font-size:13px; font-weight:700; padding:4px 12px; border-radius:20px; }
-
-/* 进度条 */
-.progress-wrap { padding:0 20px; margin-bottom:16px; }
-.progress-bar { height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
-.progress-fill { height:100%; background:var(--green); border-radius:2px; transition:width 0.5s; }
-.progress-text { font-size:12px; color:var(--muted); margin-top:6px; text-align:right; }
-
-/* 主卡片 */
-.main-card { margin:0 16px 16px; background:var(--card); border-radius:16px; padding:24px 20px; }
-.story-title { font-size:15px; color:var(--gold); font-weight:600; margin-bottom:4px; }
-.sentence-label { font-size:12px; color:var(--muted); margin-bottom:12px; }
-.sentence-en { font-size:22px; font-weight:600; line-height:1.6; margin-bottom:16px; min-height:72px; }
-.sentence-cn { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:20px; padding:12px; background:rgba(255,255,255,0.05); border-radius:8px; border-left:3px solid var(--green); }
-
-/* 生词区 */
-.vocab-list { margin-bottom:20px; }
-.vocab-title { font-size:13px; color:var(--gold); font-weight:600; margin-bottom:8px; }
-.vocab-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
-.vocab-word { font-size:15px; font-weight:600; }
-.vocab-phonetic { font-size:13px; color:var(--blue); }
-.vocab-meaning { font-size:13px; color:var(--muted); }
-
-/* 播放按钮组 */
-.play-group { display:flex; gap:10px; margin-bottom:24px; }
-.play-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:6px; padding:12px; border:none; border-radius:12px; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-.play-btn.normal { background:var(--green); color:#000; }
-.play-btn.slow { background:rgba(52,152,219,0.2); color:var(--blue); border:1px solid var(--blue); }
-.play-btn:active { transform:scale(0.96); }
-.play-btn:disabled { opacity:0.4; }
-
-/* 录音区 */
-.record-area { text-align:center; margin-bottom:16px; }
-.record-btn { width:80px; height:80px; border-radius:50%; border:3px solid var(--accent); background:transparent; color:var(--accent); font-size:28px; cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; justify-content:center; }
-.record-btn.recording { background:var(--accent); color:#fff; animation:pulse 1s infinite; }
-@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
-.record-hint { font-size:12px; color:var(--muted); margin-top:8px; }
-
-/* 识别结果 */
-.result-box { margin-bottom:16px; min-height:60px; padding:12px; border-radius:8px; font-size:14px; line-height:1.5; }
-.result-box.pass { background:rgba(46,204,113,0.15); border:1px solid var(--green); color:var(--green); }
-.result-box.fail { background:rgba(231,76,60,0.15); border:1px solid var(--accent); color:#e8a0a0; }
-.result-box .diff { color:var(--accent); font-weight:600; }
-
-/* 导航按钮 */
-.nav-group { display:flex; gap:10px; }
-.nav-btn { flex:1; padding:14px; border:none; border-radius:12px; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.2s; }
-.nav-btn:active { transform:scale(0.96); }
-.nav-btn.prev { background:rgba(255,255,255,0.1); color:var(--text); }
-.nav-btn.next { background:var(--green); color:#000; }
-.nav-btn:disabled { opacity:0.3; }
-
-/* 完成页 */
-.done-card { text-align:center; padding:40px 20px; }
-.done-icon { font-size:64px; margin-bottom:16px; }
-.done-title { font-size:24px; font-weight:700; margin-bottom:8px; }
-.done-sub { font-size:14px; color:var(--muted); margin-bottom:24px; }
-
-/* 倍速指示 */
-.speed-badge { display:inline-block; font-size:11px; background:rgba(52,152,219,0.3); color:var(--blue); padding:2px 6px; border-radius:4px; margin-left:4px; }
-
-/* 提示区 */
-.tip-box { margin:0 16px 16px; padding:12px 16px; background:rgba(243,156,18,0.1); border-radius:8px; border-left:3px solid var(--gold); font-size:13px; line-height:1.5; color:#ddd; }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--g:#2ecc71;--d:#1a1a2e;--c:#16213e;--t:#eee;--m:#8892b0;--r:#e74c3c;--gold:#f39c12;--b:#3498db}
+body{font-family:-apple-system,'PingFang SC',sans-serif;background:var(--d);color:var(--t);min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 16px}
+.top h1{font-size:18px;font-weight:700}.top h1 em{color:var(--g);font-style:normal}
+.tabs{display:flex;overflow-x:auto;padding:0 12px 12px;gap:6px;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 14px;border-radius:20px;font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer;border:none;background:rgba(255,255,255,.08);color:var(--m);transition:all .2s}
+.tab.on{background:var(--g);color:#000}
+.pbar{padding:0 16px;margin-bottom:10px}.pbar-i{height:3px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.pbar-f{height:100%;background:var(--g);border-radius:2px;transition:width .4s}
+.pt{font-size:11px;color:var(--m);margin-top:3px;text-align:right}
+.card{margin:0 12px 10px;background:var(--c);border-radius:14px;padding:16px}
+.st{font-size:14px;color:var(--gold);font-weight:600;margin-bottom:3px}
+.sl{font-size:11px;color:var(--m);margin-bottom:8px}
+.en{font-size:17px;font-weight:600;line-height:1.5;margin-bottom:10px}
+.cn{font-size:13px;color:var(--m);line-height:1.4;margin-bottom:12px;padding:8px;background:rgba(255,255,255,.04);border-radius:6px;border-left:3px solid var(--g)}
+.vt{font-size:12px;color:var(--gold);font-weight:600;margin-bottom:4px}
+.vi{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.vw{font-weight:600}.vp{color:var(--b);margin-left:3px;font-size:11px}.vm{color:var(--m)}
+.bs{display:flex;gap:8px;margin:10px 0}
+.b{flex:1;padding:10px;border:none;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer}
+.b:active{transform:scale(.96)}
+.bg{background:var(--g);color:#000}
+.bb{background:rgba(52,152,219,.2);color:var(--b);border:1px solid var(--b)}
+.br{background:rgba(231,76,60,.12);color:var(--r);border:1px solid var(--r)}
+.rb{padding:10px;border-radius:6px;font-size:13px;margin:6px 0;display:none}
+.rb.s{display:block}
+.rb.ok{background:rgba(46,204,113,.1);border:1px solid var(--g);color:var(--g)}
+.rb.no{background:rgba(231,76,60,.1);border:1px solid var(--r);color:#e8a0a0}
+.nav{display:flex;gap:8px;margin-top:4px}
+.dn{text-align:center;padding:24px 16px}.dn i{font-size:48px}.dn h2{font-size:18px;margin:8px 0 4px}.dn p{color:var(--m);font-size:13px}
+.tip{margin:0 12px 10px;padding:8px 12px;background:rgba(243,156,18,.08);border-radius:6px;border-left:3px solid var(--gold);font-size:11px;color:#ccc;line-height:1.4}
 </style>
 </head>
 <body>
-
-<div id="app">
-  <!-- 顶部 -->
-  <div class="top-bar">
-    <h1>🦞 <span>龙哥英语</span></h1>
-    <div class="day-badge">Day {{ currentDay }}</div>
-  </div>
-
-  <!-- 进度条 -->
-  <div class="progress-wrap">
-    <div class="progress-bar">
-      <div class="progress-fill" :style="{width: progressPct + '%'}"></div>
-    </div>
-    <div class="progress-text">{{ passedCount }}/{{ totalCount }} 已过关</div>
-  </div>
-
-  <!-- 完成页 -->
-  <div v-if="allDone" class="main-card done-card">
-    <div class="done-icon">🎉</div>
-    <div class="done-title">今日背诵完成！</div>
-    <div class="done-sub">{{ storyTitle }}</div>
-    <div style="font-size:14px;color:var(--muted);margin-bottom:8px;">{{ storyFull }}</div>
-    <button class="nav-btn next" style="max-width:200px;margin:0 auto;" @click="replayAll">🔁 再来一遍</button>
-  </div>
-
-  <!-- 学习卡片 -->
-  <div v-else class="main-card">
-    <div class="story-title">📖 {{ storyTitle }}</div>
-    <div class="sentence-label">第 {{ currentIndex + 1 }} / {{ totalCount }} 组</div>
-    <div class="sentence-en">{{ currentGroup.en }}</div>
-    <div class="sentence-cn">{{ currentGroup.cn }}</div>
-
-    <!-- 生词 -->
-    <div v-if="currentGroup.vocab && currentGroup.vocab.length" class="vocab-list">
-      <div class="vocab-title">📝 生词</div>
-      <div class="vocab-item" v-for="v in currentGroup.vocab" :key="v.word">
-        <div>
-          <span class="vocab-word">{{ v.word }}</span>
-          <span class="vocab-phonetic"> {{ v.phonetic }}</span>
-        </div>
-        <div class="vocab-meaning">{{ v.meaning }}</div>
-      </div>
-    </div>
-
-    <!-- 播放 -->
-    <div class="play-group">
-      <button class="play-btn normal" @click="speak(1)" :disabled="speaking">▶ 正常速</button>
-      <button class="play-btn slow" @click="speak(0.5)" :disabled="speaking">🐢 0.5倍速<span class="speed-badge">慢</span></button>
-    </div>
-
-    <!-- 录音 -->
-    <div class="record-area">
-      <button class="record-btn" :class="{recording: recording}" @mousedown="startRecord" @mouseup="stopRecord" @touchstart.prevent="startRecord" @touchend.prevent="stopRecord">
-        {{ recording ? '⏹' : '🎤' }}
-      </button>
-      <div class="record-hint">{{ recording ? '松开结束录音' : '按住说话' }}</div>
-    </div>
-
-    <!-- 识别结果 -->
-    <div v-if="resultText" class="result-box" :class="resultPass ? 'pass' : 'fail'">
-      {{ resultPass ? '✅ ' : '❌ ' }}{{ resultText }}
-    </div>
-
-    <!-- 导航 -->
-    <div class="nav-group">
-      <button class="nav-btn prev" @click="prev" :disabled="currentIndex === 0">⬅ 上一组</button>
-      <button class="nav-btn next" @click="next" :disabled="!resultPass">下一组 ➡</button>
-    </div>
-  </div>
-
-  <!-- 学习提示 -->
-  <div class="tip-box" v-if="!allDone">
-    💡 <strong>学习节奏：</strong>听3遍正常速 → 听2遍0.5倍速 → 按住录音读一遍 → AI帮你纠音 → 过关进下一组
-  </div>
-</div>
-
+<div id="a"></div>
 <script>
-const STORIES = [
-  {
-    title: "The Master（高手）",
-    groups: [
-      {
-        en: 'A young man asked a master, "How long will it take me to become great?"',
-        cn: '一个年轻人问一位大师："我要多久才能成为高手？"',
-        vocab: [
-          { word: 'master', phonetic: '/ˈmæstər/', meaning: '大师，高手' },
-          { word: 'become', phonetic: '/bɪˈkʌm/', meaning: '成为' },
-        ]
-      },
-      {
-        en: 'The master said, "Ten years."',
-        cn: '大师说："十年。"',
-        vocab: [
-          { word: 'said', phonetic: '/sed/', meaning: '说（过去式），极短一个音节' },
-        ]
-      },
-      {
-        en: 'The young man said, "That is too long. What if I practice twice as hard?"',
-        cn: '年轻人说："太久了。如果我加倍努力呢？"',
-        vocab: [
-          { word: 'twice', phonetic: '/twaɪs/', meaning: '两倍' },
-          { word: 'hard', phonetic: '/hɑːrd/', meaning: '努力' },
-        ]
-      },
-      {
-        en: 'The master smiled. "Then it will take twenty years."',
-        cn: '大师笑了："那就需要二十年。"',
-        vocab: [
-          { word: 'smiled', phonetic: '/smaɪld/', meaning: '微笑（过去式）' },
-          { word: 'twenty', phonetic: '/ˈtwenti/', meaning: '二十' },
-        ]
-      },
-      {
-        en: 'The young man was confused. "Why does more effort take longer?"',
-        cn: '年轻人困惑了："为什么越努力反而越久？"',
-        vocab: [
-          { word: 'confused', phonetic: '/kənˈfjuːzd/', meaning: '困惑' },
-          { word: 'effort', phonetic: '/ˈefərt/', meaning: '努力' },
-        ]
-      },
-      {
-        en: 'The master said, "When you rush, you do not see your mistakes."',
-        cn: '大师说："你急躁的时候，看不到自己的错误。"',
-        vocab: [
-          { word: 'rush', phonetic: '/rʌʃ/', meaning: '急躁，赶' },
-          { word: 'mistakes', phonetic: '/mɪˈsteɪks/', meaning: '错误' },
-        ]
-      },
-      {
-        en: 'You practice the wrong way a thousand times, and it becomes a habit.',
-        cn: '你用错误的方式练一千遍，它就成了习惯。',
-        vocab: [
-          { word: 'thousand', phonetic: '/ˈθaʊzənd/', meaning: '一千' },
-          { word: 'habit', phonetic: '/ˈhæbɪt/', meaning: '习惯' },
-        ]
-      },
-      {
-        en: 'A bad habit is harder to fix than no habit at all.',
-        cn: '坏习惯比没有习惯更难改。',
-        vocab: [
-          { word: 'fix', phonetic: '/fɪks/', meaning: '修正' },
-        ]
-      }
-    ]
-  }
+var B='https://363275987-cyber.github.io/daily-english/audio/';
+// Day 1 uses old naming s0-s7, Day 2-7 use d{day}_g{group}
+function aUrl(d,g,sp){
+  if(d===1)return B+'s'+g+'_'+sp+'.mp3';
+  return B+'d'+d+'_'+g+'_'+sp+'.mp3';
+}
+
+var D=[
+{id:1,title:"The Question",g:[
+{en:'A young man asked a master, "How long will it take me to become great?"',cn:'一个年轻人问一位大师：我要多久才能成为高手？',v:[{w:'master',p:'/ˈmæstər/',m:'大师，高手'},{w:'become',p:'/bɪˈkʌm/',m:'成为'}]},
+{en:'The master said, "Ten years."',cn:'大师说：十年。',v:[{w:'said',p:'/sed/',m:'说（过去式）'}]},
+{en:'The young man said, "That is too long. What if I practice twice as hard?"',cn:'年轻人说：太久了。如果我加倍努力呢？',v:[{w:'twice',p:'/twaɪs/',m:'两倍'},{w:'hard',p:'/hɑːrd/',m:'努力'}]},
+{en:'The master smiled. "Then it will take twenty years."',cn:'大师笑了：那就需要二十年。',v:[{w:'smiled',p:'/smaɪld/',m:'微笑（过去式）'},{w:'twenty',p:'/ˈtwenti/',m:'二十'}]},
+{en:'The young man was confused. "Why does more effort take longer?"',cn:'年轻人困惑了：为什么越努力反而越久？',v:[{w:'confused',p:'/kənˈfjuːzd/',m:'困惑'},{w:'effort',p:'/ˈefərt/',m:'努力'}]},
+{en:'The master said, "When you rush, you do not see your mistakes."',cn:'大师说：你急躁的时候，看不到自己的错误。',v:[{w:'rush',p:'/rʌʃ/',m:'急躁，赶'},{w:'mistakes',p:'/mɪˈsteɪks/',m:'错误'}]},
+{en:'You practice the wrong way a thousand times, and it becomes a habit.',cn:'你用错误的方式练一千遍，它就成了习惯。',v:[{w:'thousand',p:'/ˈθaʊzənd/',m:'一千'},{w:'habit',p:'/ˈhæbɪt/',m:'习惯'}]},
+{en:'A bad habit is harder to fix than no habit at all.',cn:'坏习惯比没有习惯更难改。',v:[{w:'fix',p:'/fɪks/',m:'修正'}]}
+]},
+{id:2,title:"The Lesson Begins",g:[
+{en:'The young man stayed with the master.',cn:'年轻人留在了大师身边。',v:[{w:'stayed',p:'/steɪd/',m:'留下（过去式）'}]},
+{en:'Every morning, he practiced alone before sunrise.',cn:'每天早上，他在日出前独自练习。',v:[{w:'sunrise',p:'/ˈsʌnraɪz/',m:'日出'},{w:'alone',p:'/əˈloʊn/',m:'独自'}]},
+{en:'He repeated the same simple move a hundred times.',cn:'他重复同一个简单的动作一百遍。',v:[{w:'repeated',p:'/rɪˈpiːtɪd/',m:'重复（过去式）'},{w:'simple',p:'/ˈsɪmpəl/',m:'简单的'}]},
+{en:'"Why only this one move?" he asked.',cn:'他问：为什么只练这一个动作？',v:[{w:'move',p:'/muːv/',m:'动作'}]},
+{en:'"Because this one move is the foundation," the master said.',cn:'大师说：因为这一个动作是基础。',v:[{w:'foundation',p:'/faʊnˈdeɪʃn/',m:'基础'},{w:'because',p:'/bɪˈkɔːz/',m:'因为'}]},
+{en:'"Without it, everything else falls apart."',cn:'没有它，其他一切都会崩塌。',v:[{w:'without',p:'/wɪˈðaʊt/',m:'没有'},{w:'falls apart',p:'/fɔːlz əˈpɑːrt/',m:'崩塌'}]}
+]},
+{id:3,title:"The Impatient Student",g:[
+{en:'After two weeks, the young man grew restless.',cn:'两周后，年轻人变得不耐烦了。',v:[{w:'restless',p:'/ˈrestləs/',m:'不安的，不耐烦'}]},
+{en:'"I have practiced this move for fourteen days. When will I learn something new?"',cn:'这个动作我已经练了14天了，什么时候才能学新的？',v:[{w:'fourteen',p:'/ˌfɔːrˈtiːn/',m:'十四'}]},
+{en:'The master picked up a cup and poured water until it overflowed.',cn:'大师拿起一个杯子，倒水直到溢出。',v:[{w:'poured',p:'/pɔːrd/',m:'倒（过去式）'},{w:'overflowed',p:'/ˌoʊvərˈfloʊd/',m:'溢出'}]},
+{en:'"Your mind is like this cup," he said.',cn:'他说：你的心就像这个杯子。',v:[{w:'mind',p:'/maɪnd/',m:'心，思维'},{w:'cup',p:'/kʌp/',m:'杯子'}]},
+{en:'"It is already full. I cannot pour anything in."',cn:'它已经满了，我倒不进任何东西。',v:[{w:'already',p:'/ɔːlˈredi/',m:'已经'},{w:'full',p:'/fʊl/',m:'满的'}]}
+]},
+{id:4,title:"The Breaking Point",g:[
+{en:'One evening, the young man tried to learn an advanced technique on his own.',cn:'一天傍晚，年轻人自己偷偷学了一个高级技巧。',v:[{w:'advanced',p:'/ədˈvænst/',m:'高级的'},{w:'technique',p:'/tekˈniːk/',m:'技巧'}]},
+{en:'He failed again and again.',cn:'他一次又一次地失败。',v:[{w:'failed',p:'/feɪld/',m:'失败（过去式）'}]},
+{en:'His hands were sore, and his pride was hurt.',cn:'他的手很痛，自尊心也受了伤。',v:[{w:'sore',p:'/sɔːr/',m:'疼痛的'},{w:'pride',p:'/praɪd/',m:'自尊心'}]},
+{en:'The master watched silently from the doorway.',cn:'大师从门口静静地看着。',v:[{w:'silently',p:'/ˈsaɪləntli/',m:'静静地'},{w:'doorway',p:'/ˈdɔːrweɪ/',m:'门口'}]},
+{en:'"Now you are ready to learn," the master said quietly.',cn:'大师轻轻说：现在你准备好学习了。',v:[{w:'ready',p:'/ˈredi/',m:'准备好的'},{w:'quietly',p:'/ˈkwaɪətli/',m:'轻轻地'}]},
+{en:'"Because now you know that shortcuts do not work."',cn:'因为现在你知道了，捷径是行不通的。',v:[{w:'shortcuts',p:'/ˈʃɔːrtkʌts/',m:'捷径'}]}
+]},
+{id:5,title:"The Slow Path",g:[
+{en:'The young man returned to the basic move.',cn:'年轻人回到了那个基础动作。',v:[{w:'returned',p:'/rɪˈtɜːrnd/',m:'回到（过去式）'},{w:'basic',p:'/ˈbeɪsɪk/',m:'基础的'}]},
+{en:'But this time, something was different.',cn:'但这一次，有什么不一样了。',v:[{w:'different',p:'/ˈdɪfrənt/',m:'不同的'}]},
+{en:'He noticed things he had never seen before.',cn:'他注意到了以前从未看到的东西。',v:[{w:'noticed',p:'/ˈnoʊtɪst/',m:'注意到（过去式）'}]},
+{en:'The angle of his wrist. The shift of his weight. The rhythm of his breath.',cn:'手腕的角度，重心的转移，呼吸的节奏。',v:[{w:'angle',p:'/ˈæŋɡl/',m:'角度'},{w:'rhythm',p:'/ˈrɪðəm/',m:'节奏'}]},
+{en:'"I have been doing this wrong for weeks," he whispered.',cn:'他低声说：我这几周一直都做错了。',v:[{w:'whispered',p:'/ˈwɪspərd/',m:'低声说'}]},
+{en:'The master smiled and said, "Now you are truly practicing."',cn:'大师笑了：现在你才是在真正练习。',v:[{w:'truly',p:'/ˈtruːli/',m:'真正地'}]}
+]},
+{id:6,title:"The Competition",g:[
+{en:'Months later, a famous teacher came to challenge the master\'s students.',cn:'几个月后，一位名师来挑战大师的学生们。',v:[{w:'challenge',p:'/ˈtʃælɪndʒ/',m:'挑战'},{w:'famous',p:'/ˈfeɪməs/',m:'著名的'}]},
+{en:'Everyone was nervous except the young man.',cn:'除了年轻人，所有人都紧张。',v:[{w:'nervous',p:'/ˈnɜːrvəs/',m:'紧张的'},{w:'except',p:'/ɪkˈsept/',m:'除了'}]},
+{en:'The famous teacher was fast and powerful.',cn:'那位名师又快又有力。',v:[{w:'powerful',p:'/ˈpaʊərfl/',m:'有力量的'}]},
+{en:'But the young man only used his one basic move, slowly and perfectly.',cn:'但年轻人只用他那一个基础动作，缓慢而完美。',v:[{w:'perfectly',p:'/ˈpɜːrfɪktli/',m:'完美地'}]},
+{en:'To everyone\'s surprise, nobody could stop it.',cn:'出乎所有人意料，没有人能挡住。',v:[{w:'surprise',p:'/sərˈpraɪz/',m:'意外'}]},
+{en:'"How did you win with just one move?" they asked.',cn:'他们问：你怎么只用一招就赢了？',v:[]},
+{en:'"Because I practiced it the right way," he said.',cn:'他说：因为我用正确的方式练过它。',v:[]}
+]},
+{id:7,title:"The Master's Gift",g:[
+{en:'Years passed. The young man became a master himself.',cn:'多年后，年轻人自己也成了一代大师。',v:[{w:'himself',p:'/hɪmˈself/',m:'他自己'}]},
+{en:'One day, a new student asked him, "How long will it take me to become great?"',cn:'一天，一个新学生问他：我要多久才能成为高手？',v:[]},
+{en:'He smiled and said the same words his master had told him long ago: "Ten years."',cn:'他笑了，说出了他大师当年对他说的话：十年。',v:[]},
+{en:'"But if you practice the right way, every single day counts."',cn:'但如果你用正确的方式练，每一天都算数。',v:[{w:'counts',p:'/kaʊnts/',m:'算数，有意义'}]},
+{en:'"The journey itself is the reward."',cn:'旅程本身就是回报。',v:[{w:'journey',p:'/ˈdʒɜːrni/',m:'旅程'},{w:'reward',p:'/rɪˈwɔːrd/',m:'回报，奖赏'}]},
+{en:'The student bowed, and the cycle began again.',cn:'学生鞠躬，循环又开始了。',v:[{w:'bowed',p:'/baʊd/',m:'鞠躬（过去式）'},{w:'cycle',p:'/ˈsaɪkl/',m:'循环'}]}
+]}{id:8,title:"A Father's Words",g:[
+{en:'Proud of you.',cn:'以你为荣。'},
+{en:"You're 8. These are very hard skills — half these college kids can't even do it.",cn:'你才八岁。这些动作非常难——一半的大学生都做不了。'},
+{en:"You're not bad. You are learning how to train like an athlete.",cn:'你不差。你正在学怎么像运动员一样训练。'},
+{en:'Sometimes you mess up. Mistakes are not bad.',cn:'有时候你会失误。但失误不等于你不好。'},
+{en:'Your tongue has the power.',cn:'你的语言有力量。'},
+{en:'If you keep telling yourself you are bad, you will be bad.',cn:'如果你一直说自己不行，你就会不行。'},
+{en:'But if you tell yourself you are good, you will be good.',cn:'但如果你告诉自己你可以，你就会可以。'},
+{en:'Stop putting yourself down.',cn:'停止贬低自己。'},
+{en:'I will not tolerate you cutting yourself down.',cn:'我不允许你贬低自己。'},
+{en:'Speak highly of yourself to yourself.',cn:'对自己说好话。对自己说不好的话，太疯狂了。'}
+]},
+{id:9,title:"Never Give Up",g:[
+{en:'You can quit if you truly do not like something.',cn:'如果你真的不喜欢，可以放弃。'},
+{en:'But you cannot quit because something might be scary.',cn:'但不能因为害怕而放弃。'},
+{en:"I'm not going to let you give up on yourself.",cn:'我不会让你放弃自己。'},
+{en:"If I've made you feel I don't care about you, I've not done my job as a father.",cn:'如果我让你觉得我不关心你，那是我这个父亲没做好。'},
+{en:'I love you so much.',cn:'我非常爱你。'},
+{en:"I'll do whatever it takes to make sure you're successful.",cn:'我会不惜一切确保你成功。'},
+{en:'The only limits you have are the limits you put on yourself.',cn:'你唯一的限制，是自己给自己设的限制。'},
+{en:'If you tell yourself you can achieve something, you will eventually achieve it.',cn:'如果你告诉自己你能做到，哪怕不是立刻——你最终会做到。'},
+{en:'You are capable.',cn:'你有这个能力。'}
+]},
 ];
 
-const { createApp, ref, computed, watch, onMounted } = Vue;
 
-createApp({
-  setup() {
-    const currentDay = ref(1);
-    const storyIndex = ref(0);
-    const currentIndex = ref(0);
-    const speaking = ref(false);
-    const recording = ref(false);
-    const resultText = ref('');
-    const resultPass = ref(false);
-    const passedSet = ref(new Set());
-    const mediaRecorder = ref(null);
-    const audioChunks = ref([]);
+];
 
-    const story = computed(() => STORIES[storyIndex.value]);
-    const storyTitle = computed(() => story.value.title);
-    const currentGroup = computed(() => story.value.groups[currentIndex.value]);
-    const totalCount = computed(() => story.value.groups.length);
-    const passedCount = computed(() => passedSet.value.size);
-    const progressPct = computed(() => (passedCount.value / totalCount.value) * 100);
-    const allDone = computed(() => passedCount.value === totalCount.value);
-    const storyFull = computed(() => story.value.groups.map(g => g.en).join(' '));
+var cd=1,gi=0,p={},au=null;
+try{var sv=JSON.parse(localStorage.getItem('ev7')||'{}');p=sv.p||{};cd=sv.cd||1;gi=sv.gi||0}catch(e){}
+function s(){try{localStorage.setItem('ev7',JSON.stringify({p:p,cd:cd,gi:gi}))}catch(e){}}
 
-    // TTS
-    function speak(rate = 1) {
-      if (speaking.value) return;
-      const u = new SpeechSynthesisUtterance(currentGroup.value.en);
-      u.lang = 'en-US';
-      u.rate = rate;
-      u.pitch = 1;
-      speaking.value = true;
-      u.onend = () => speaking.value = false;
-      u.onerror = () => speaking.value = false;
-      speechSynthesis.cancel();
-      speechSynthesis.speak(u);
+function play(sp){
+  if(au){au.pause();au=null}
+  au=new Audio(aUrl(cd,gi,sp));
+  au.play().catch(function(){});
+}
+
+function r(){
+  var day=D.find(function(x){return x.id===cd});
+  if(!day){cd=1;day=D[0]}
+  var gs=day.g,g=gs[gi],t=gs.length;
+  // Count total passed
+  var tp=0;for(var k in p)tp++;
+  var tt=0;D.forEach(function(d){tt+=d.g.length});
+  var pct=Math.round(tp/tt*100);
+  var allDone=tp===tt;
+
+  var h='';
+  // Header
+  h+='<div class="top"><h1>🦞 <em>龙哥英语</em></h1></div>';
+
+  // Day tabs
+  h+='<div class="tabs">';
+  D.forEach(function(d){
+    var done=0;
+    d.g.forEach(function(_,i){if(p[d.id+'_'+i])done++});
+    var label='D'+d.id+(done===d.g.length?' ✓':'');
+    h+='<button class="tab'+(cd===d.id?' on':'')+'" onclick="swDay('+d.id+')">'+label+'</button>';
+  });
+  h+='</div>';
+
+  // Progress
+  h+='<div class="pbar"><div class="pbar-i"><div class="pbar-f" style="width:'+pct+'%"></div></div><div class="pt">'+tp+'/'+tt+' 已过关</div></div>';
+
+  if(allDone){
+    h+='<div class="card dn"><i>🎉</i><h2>全部完成！</h2><p>9天，3个故事，你全部背完了！</p>';
+    h+='<div class="bs" style="margin-top:12px"><button class="b bg" style="max-width:180px;margin:0 auto" onclick="p={};cd=1;gi=0;s();r()">🔁 重来</button></div></div>';
+  }else{
+    h+='<div class="card">';
+    h+='<div class="st">📖 The Master — '+day.title+'</div>';
+    h+='<div class="sl">Day '+cd+' · 第 '+(gi+1)+' / '+t+' 组</div>';
+    h+='<div class="en">'+g.en+'</div>';
+    h+='<div class="cn">'+g.cn+'</div>';
+    if(g.v&&g.v.length){
+      h+='<div class="vt">📝 生词</div>';
+      g.v.forEach(function(x){h+='<div class="vi"><div><span class="vw">'+x.w+'</span><span class="vp">'+x.p+'</span></div><div class="vm">'+x.m+'</div></div>'});
     }
-
-    // STT
-    function startRecord() {
-      resultText.value = '';
-      resultPass.value = false;
-      recording.value = true;
-      audioChunks.value = [];
-      
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        mediaRecorder.value = new MediaRecorder(stream);
-        mediaRecorder.value.ondataavailable = e => audioChunks.value.push(e.data);
-        mediaRecorder.value.onstop = () => {
-          stream.getTracks().forEach(t => t.stop());
-          const blob = new Blob(audioChunks.value, { type: 'audio/webm' });
-          recognizeSpeech(blob);
-        };
-        mediaRecorder.value.start();
-      }).catch(err => {
-        recording.value = false;
-        resultText.value = '❌ 无法访问麦克风，请检查权限';
-        resultPass.value = false;
-      });
-    }
-
-    function stopRecord() {
-      if (mediaRecorder.value && mediaRecorder.value.state === 'recording') {
-        mediaRecorder.value.stop();
-      }
-      recording.value = false;
-    }
-
-    function recognizeSpeech(blob) {
-      // Try Web Speech API first
-      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SR();
-        recognition.lang = 'en-US';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 3;
-        
-        recognition.onresult = (e) => {
-          const text = e.results[0][0].transcript;
-          compareResult(text);
-        };
-        recognition.onerror = (e) => {
-          fallbackCompare();
-        };
-        
-        // We already recorded, so use the recording to play back for recognition
-        // Actually Web Speech API listens from mic, not from blob
-        // So let's use a different approach: compare with a simple heuristic
-        fallbackCompare();
-      } else {
-        fallbackCompare();
-      }
-    }
-
-    function fallbackCompare() {
-      // Since we can't do server-side recognition in a static page,
-      // ask user to self-evaluate with a simple UI
-      resultText.value = '请自我评判：你觉得自己读对了吗？';
-      resultPass.value = false;
-      
-      // Show self-eval buttons
-      selfEvalMode.value = true;
-    }
-
-    const selfEvalMode = ref(false);
-
-    function selfEval(passed) {
-      selfEvalMode.value = false;
-      if (passed) {
-        resultText.value = '✅ 过关！';
-        resultPass.value = true;
-        passedSet.value.add(currentIndex.value);
-        saveProgress();
-      } else {
-        resultText.value = '❌ 再来一遍，多听几遍慢速版';
-        resultPass.value = false;
-      }
-    }
-
-    function compareResult(text) {
-      const original = currentGroup.value.en.replace(/[^a-zA-Z\s]/g, '').toLowerCase().trim();
-      const spoken = text.replace(/[^a-zA-Z\s]/g, '').toLowerCase().trim();
-      
-      const origWords = original.split(/\s+/);
-      const spokenWords = spoken.split(/\s+/);
-      
-      let matchCount = 0;
-      const origSet = new Set(origWords);
-      spokenWords.forEach(w => { if (origSet.has(w)) matchCount++; });
-      
-      const accuracy = matchCount / origWords.length;
-      
-      if (accuracy >= 0.7) {
-        resultText.value = `✅ 识别: "${text}" — 过关！准确率${Math.round(accuracy*100)}%`;
-        resultPass.value = true;
-        passedSet.value.add(currentIndex.value);
-        saveProgress();
-      } else {
-        resultText.value = `❌ 识别: "${text}" — 再来一遍`;
-        resultPass.value = false;
-      }
-    }
-
-    function next() {
-      if (currentIndex.value < totalCount.value - 1) {
-        currentIndex.value++;
-        resultText.value = '';
-        resultPass.value = false;
-      }
-    }
-
-    function prev() {
-      if (currentIndex.value > 0) {
-        currentIndex.value--;
-        resultText.value = '';
-        resultPass.value = false;
-      }
-    }
-
-    function replayAll() {
-      currentIndex.value = 0;
-      passedSet.value = new Set();
-      resultText.value = '';
-      resultPass.value = false;
-      localStorage.removeItem('eng_progress');
-    }
-
-    function saveProgress() {
-      localStorage.setItem('eng_progress', JSON.stringify({
-        day: currentDay.value,
-        story: storyIndex.value,
-        passed: [...passedSet.value]
-      }));
-    }
-
-    function loadProgress() {
-      const saved = localStorage.getItem('eng_progress');
-      if (saved) {
-        const data = JSON.parse(saved);
-        currentDay.value = data.day || 1;
-        storyIndex.value = data.story || 0;
-        passedSet.value = new Set(data.passed || []);
-      }
-    }
-
-    onMounted(() => {
-      loadProgress();
-    });
-
-    return {
-      currentDay, currentIndex, speaking, recording,
-      resultText, resultPass, passedCount, totalCount, progressPct,
-      storyTitle, currentGroup, allDone, storyFull,
-      selfEvalMode,
-      speak, startRecord, stopRecord, next, prev, replayAll, selfEval
-    };
+    h+='<div class="bs"><button class="b bg" onclick="play(\'n\')">▶ 正常速</button><button class="b bb" onclick="play(\'s\')">🐢 0.5倍速</button></div>';
+    h+='<div class="rb" id="rb"></div>';
+    h+='<div class="bs"><button class="b bg" onclick="mp()">✅ 过关</button><button class="b br" onclick="mf()">❌ 再练</button></div>';
+    h+='<div class="nav"><button class="b bb" onclick="pv()"'+(gi===0&&cd===1?' disabled style="opacity:.3"':'')+'>⬅ 上一组</button><button class="b bg" onclick="nx()">下一组 ➡</button></div>';
+    h+='</div>';
   }
-}).mount('#app');
+  h+='<div class="tip">💡 听3遍正常速 → 听2遍0.5倍速 → 跟读 → 点过关</div>';
+  document.getElementById('a').innerHTML=h;
+}
+
+function swDay(d){cd=d;gi=0;s();r()}
+function mp(){p[cd+'_'+gi]=1;s();var e=document.getElementById('rb');e.className='rb s ok';e.textContent='✅ 过关！';setTimeout(function(){nx()},600)}
+function mf(){var e=document.getElementById('rb');e.className='rb s no';e.textContent='❌ 再听几遍慢速版！'}
+function nx(){
+  if(au){au.pause();au=null}
+  var day=D.find(function(x){return x.id===cd});
+  if(gi<day.g.length-1){gi++;s();r()}
+  else if(cd<7){cd++;gi=0;s();r()}
+  else r();
+}
+function pv(){
+  if(au){au.pause();au=null}
+  if(gi>0){gi--;s();r()}
+  else if(cd>1){cd--;var day=D.find(function(x){return x.id===cd});gi=day.g.length-1;s();r()}
+}
+r();
 </script>
-
-<!-- Self-eval buttons (outside Vue for simplicity, or add to template) -->
-<script>
-// Add self-eval UI dynamically
-const app = document.querySelector('#app');
-const observer = new MutationObserver(() => {
-  const resultBox = document.querySelector('.result-box.fail');
-  if (resultBox && !document.querySelector('.self-eval-btns')) {
-    const btns = document.createElement('div');
-    btns.className = 'self-eval-btns';
-    btns.style.cssText = 'display:flex;gap:10px;margin-top:12px;';
-    btns.innerHTML = `
-      <button onclick="window._selfEval(true)" style="flex:1;padding:12px;border:none;border-radius:8px;background:#2ecc71;color:#000;font-weight:700;font-size:14px;cursor:pointer;">✅ 过关</button>
-      <button onclick="window._selfEval(false)" style="flex:1;padding:12px;border:none;border-radius:8px;background:rgba(231,76,60,0.3);color:#e8a0a0;font-weight:700;font-size:14px;cursor:pointer;">❌ 再练</button>
-    `;
-    resultBox.appendChild(btns);
-  }
-});
-observer.observe(app, { childList: true, subtree: true });
-
-window._selfEval = function(passed) {
-  const vueApp = app.__vue_app__;
-  // Find the component instance
-  const instance = vueApp._instance.proxy;
-  if (passed) {
-    instance.resultText = '✅ 过关！进入下一组';
-    instance.resultPass = true;
-    instance.passedSet.add(instance.currentIndex);
-    const data = JSON.stringify({ day: instance.currentDay, story: 0, passed: [...instance.passedSet] });
-    localStorage.setItem('eng_progress', data);
-  } else {
-    instance.resultText = '❌ 再听几遍慢速版，再来一次！';
-    instance.resultPass = false;
-  }
-};
-</script>
-
 </body>
 </html>
